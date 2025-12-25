@@ -1,0 +1,47 @@
+import turtle  # import turtle to draw
+
+# --------- recursive function to draw one edge with indentation ---------
+def draw_edge(t, length, depth):
+    if depth == 0:  # base case: just draw a straight line
+        t.forward(length)
+        return
+
+    # divide the line into 3 parts
+    segment = length / 3
+
+    draw_edge(t, segment, depth - 1)  # first part
+    t.left(60)                        # turn left to make triangle dent
+    draw_edge(t, segment, depth - 1)  # second part
+    t.right(120)                       # turn right for dent
+    draw_edge(t, segment, depth - 1)  # third part
+    t.left(60)                         # turn back
+    draw_edge(t, segment, depth - 1)  # last part
+
+# --------- function to draw polygon ---------
+def draw_polygon(t, sides, length, depth):
+    angle = 360 / sides  # exterior angle of polygon
+    for _ in range(sides):
+        draw_edge(t, length, depth)  # draw one side with recursive pattern
+        t.right(angle)               # turn to next side
+
+# --------- get user input ---------
+sides = int(input("Enter the number of sides (3 or more): "))
+length = int(input("Enter the side length (pixels, positive number): "))
+depth = int(input("Enter recursion depth (0 or more): "))
+
+# --------- turtle setup ---------
+screen = turtle.Screen()
+screen.bgcolor("white")  # background color
+
+t = turtle.Turtle()
+t.speed(0)  # fastest drawing speed
+
+# move turtle so shape is roughly centered
+t.penup()
+t.goto(-length / 2, length / 2)
+t.pendown()
+
+# draw the polygon with recursive edges
+draw_polygon(t, sides, length, depth)
+
+turtle.done()  # finish turtle
