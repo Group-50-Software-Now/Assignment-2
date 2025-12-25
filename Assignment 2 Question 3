@@ -15,4 +15,12 @@ def draw_edge(t, length, depth):
     draw_edge(t, segment, depth - 1)  # third part
     t.left(60)                         # turn back
     draw_edge(t, segment, depth - 1)  # last part
+
+# --------- function to draw polygon ---------
+def draw_polygon(t, sides, length, depth):
+    angle = 360 / sides  # exterior angle of polygon
+    for _ in range(sides):
+        draw_edge(t, length, depth)  # draw one side with recursive pattern
+        t.right(angle)               # turn to next side
+
     
