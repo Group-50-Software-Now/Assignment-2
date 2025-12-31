@@ -1,4 +1,4 @@
-## Encryption.py
+##Encryption.py
 
 def shift_char(char, shift):
     if char.islower():
