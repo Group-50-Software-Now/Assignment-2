@@ -1,49 +1,61 @@
-import turtle  # import turtle to draw
+import turtle
 
-# --------- recursive function to draw one edge with indentation ---------
 def draw_edge(t, length, depth):
-    if depth == 0:  # base case: just draw a straight line
+    # If depth is 0, stop recursion so the program does not run forever
+    if depth == 0:
         t.forward(length)
         return
-# divide the line into 3 parts
-    segment = length / 3
 
-    draw_edge(t, segment, depth - 1)  # first part
-    t.left(60)                        # turn left to make triangle dent
-    draw_edge(t, segment, depth - 1)  # second part
-    t.right(120)                       # turn right for dent
-    draw_edge(t, segment, depth - 1)  # third part
-    t.left(60)                         # turn back
-    draw_edge(t, segment, depth - 1)  # last part
+    # Splitting the line into three parts helps create the indentation shape
+    part = length / 3
 
-# --------- function to draw polygon ---------
+    draw_edge(t, part, depth - 1)
+    t.left(60)   # Turning creates the triangular dent
+    draw_edge(t, part, depth - 1)
+    t.right(120) # This turn points the turtle inward
+    draw_edge(t, part, depth - 1)
+    t.left(60)   # Reset direction back to normal
+    draw_edge(t, part, depth - 1)
+
+
 def draw_polygon(t, sides, length, depth):
-    angle = 360 / sides  # exterior angle of polygon
+    # The angle is needed so the polygon closes properly
+    angle = 360 / sides
+
     for _ in range(sides):
-        draw_edge(t, length, depth)  # draw one side with recursive pattern
-        t.right(angle)               # turn to next side
+        draw_edge(t, length, depth)
+        t.right(angle)
 
-# --------- get user input ---------
-sides = int(input("Enter the number of sides (3 or more): "))
-length = int(input("Enter the side length (pixels, positive number): "))
+
+# ----- user input with simple checking -----
+sides = int(input("Enter number of sides (3 or more): "))
+while sides < 3:
+    sides = int(input("Please enter 3 or more sides: "))
+
+length = int(input("Enter side length (positive number): "))
+while length <= 0:
+    length = int(input("Please enter a positive number: "))
+
 depth = int(input("Enter recursion depth (0 or more): "))
+while depth < 0:
+    depth = int(input("Please enter 0 or more: "))
 
-# --------- turtle setup ---------
+
+# ----- turtle setup -----
 screen = turtle.Screen()
-screen.bgcolor("white")  # background color
+screen.bgcolor("white")
 
 t = turtle.Turtle()
-t.speed(0)  # fastest drawing speed
+t.speed(0)
 
-# move turtle so shape is roughly centered
+# Moving the turtle helps keep the shape visible on screen
 t.penup()
 t.goto(-length / 2, length / 2)
 t.pendown()
 
-# draw the polygon with recursive edges
 draw_polygon(t, sides, length, depth)
 
-turtle.done()  # finish turtle
+turtle.done()
 
 
 
