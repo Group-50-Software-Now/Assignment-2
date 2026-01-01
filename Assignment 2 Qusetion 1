@@ -1,4 +1,4 @@
-##Encryption.py
+##Encryption.py##
 
 def shift_char(char, shift):
     # We use modulo so letters wrap around instead of going out of range
