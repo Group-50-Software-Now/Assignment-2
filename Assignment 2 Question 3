@@ -35,6 +35,16 @@ screen.bgcolor("white")  # background color
 t = turtle.Turtle()
 t.speed(0)  # fastest drawing speed
 
+# move turtle so shape is roughly centered
+t.penup()
+t.goto(-length / 2, length / 2)
+t.pendown()
+
+# draw the polygon with recursive edges
+draw_polygon(t, sides, length, depth)
+
+turtle.done()  # finish turtle
+
 
 
     
