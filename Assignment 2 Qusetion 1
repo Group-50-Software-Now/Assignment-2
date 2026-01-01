@@ -2,6 +2,7 @@
 
 def shift_char(char, shift):
     # We use modulo so letters wrap around instead of going out of range
+    
     if char.islower():
         return chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
 
