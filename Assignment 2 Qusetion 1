@@ -50,6 +50,7 @@ def encrypt_file(shift1, shift2, raw_file_path):
     encrypted_text, key = encrypt_text(text, shift1, shift2)
 
     # Write the key first so decryption knows what to do
+
     with open("encrypted_text.txt", "w", encoding="utf-8") as file:
         file.write(key + "\n")
         file.write(encrypted_text)
