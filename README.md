@@ -9,10 +9,10 @@ This repository is created for the **group project** of the unit **HIT137 – So
 - **Project Type:** Group Assignment  
 
 ## 👥 Team Members
-- Roman (CyberDevilSec1)
-- Suriya Sankar(suriya-sankar24)
-- Khushi(khushi-cdu)
-- Bittu Kumar
+- Roman Bisural (CyberDevilSec1) - S397541
+- Suriya Sankar(suriya-sankar24) - S397448
+- Khushi(khushi-cdu) - S398777
+- Bittu Kumar Gupta (Iambittukumar) - S397540
 
 ## 🎯 Project Overview
 This project contains the solutions for **Assignment 2** of HIT137.  
