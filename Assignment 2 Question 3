@@ -28,4 +28,13 @@ sides = int(input("Enter the number of sides (3 or more): "))
 length = int(input("Enter the side length (pixels, positive number): "))
 depth = int(input("Enter recursion depth (0 or more): "))
 
+# --------- turtle setup ---------
+screen = turtle.Screen()
+screen.bgcolor("white")  # background color
+
+t = turtle.Turtle()
+t.speed(0)  # fastest drawing speed
+
+
+
     
