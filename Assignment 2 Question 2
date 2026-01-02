@@ -3,7 +3,7 @@ import glob #used to collect all CSV files in a folder automatically
 import pandas as pd # to simplify reading csvs + grouping calculations(mean/std/max/min)
 
 TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"    # used to path the folder that contains all the temprature CSV files
-# file path used by Khushi id 
+# file path used by Khushi id:S398777
 #TEMPERATURE_FOLDER = r"/Users/khushi/Assignment_2/temperatures" 
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
@@ -28,11 +28,15 @@ def find_season(month): #isolate month-season mapping so it can be reused consis
 
 
 # Reads all CSV files and combines them into one dataset
+
 def load_all_years_data(folder_path):
+# Look through the given folder and gather every CSV file so
+# data from multiple years can be processed together in one step
     # All CSV files in the folder are collected
     csv_files = glob.glob(os.path.join(folder_path, "*.csv"))
 
     if len(csv_files) == 0:
+# Stop early if the folder has no data files, since there is nothing meaningful to load or combine
         print("No CSV files found in the folder.")
         return None
 
@@ -50,5 +54,7 @@ def load_all_years_data(folder_path):
             var_name="Month",
             value_name="Temperature"
         )
+
+# This list will hold data from all CSV files before they are merged
 
         combined_data.append(df_long)
