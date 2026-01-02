@@ -3,7 +3,8 @@ import glob #used to collect all CSV files in a folder automatically
 import pandas as pd # to simplify reading csvs + grouping calculations(mean/std/max/min)
 
 TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"    # used to path the folder that contains all the temprature CSV files
-
+# file path used by Khushi id 
+#TEMPERATURE_FOLDER = r"/Users/khushi/Assignment_2/temperatures" 
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -24,3 +25,30 @@ def find_season(month): #isolate month-season mapping so it can be reused consis
         if month in months: #membership test is simple and readable for this small list
             return season  # as soon as we find it , we stop (efficient + clear)
     return None # signals invalid month header/data instead of silently guessing
+
+
+# Reads all CSV files and combines them into one dataset
+def load_all_years_data(folder_path):
+    # All CSV files in the folder are collected
+    csv_files = glob.glob(os.path.join(folder_path, "*.csv"))
+
+    if len(csv_files) == 0:
+        print("No CSV files found in the folder.")
+        return None
+
+    combined_data = []
+
+# Each file is read and reshaped into a usable format
+    for file_path in csv_files:
+        df = pd.read_csv(file_path)
+
+# Monthly temperature columns are converted into
+        # one column called 'Temperature' with a matching 'Month'
+        df_long = df.melt(
+            id_vars=["STATION_NAME", "STN_ID", "LAT", "LON"],
+            value_vars=MONTHS,
+            var_name="Month",
+            value_name="Temperature"
+        )
+
+        combined_data.append(df_long)
