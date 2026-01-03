@@ -1,25 +1,38 @@
 import turtle
 
+
 def draw_edge(t, length, depth):
-    # If depth is 0, stop recursion so the program does not run forever
+    """
+    Recursively draws one edge with an inward triangular indentation.
+    """
+    # Base case: draw a straight line when no more recursion is needed
     if depth == 0:
         t.forward(length)
         return
 
-    # Splitting the line into three parts helps create the indentation shape
+    # Each edge is divided into three equal parts
     part = length / 3
 
+    # First segment
     draw_edge(t, part, depth - 1)
-    t.left(60)   # Turning creates the triangular dent
+
+    # Inward indentation using an equilateral triangle
+    t.right(60)
     draw_edge(t, part, depth - 1)
-    t.right(120) # This turn points the turtle inward
+
+    t.left(120)
     draw_edge(t, part, depth - 1)
-    t.left(60)   # Reset direction back to normal
+
+    t.right(60)
+
+    # Final segment
     draw_edge(t, part, depth - 1)
 
 
 def draw_polygon(t, sides, length, depth):
-    # The angle is needed so the polygon closes properly
+    """
+    Draws a regular polygon where each side uses the recursive edge pattern.
+    """
     angle = 360 / sides
 
     for _ in range(sides):
@@ -27,36 +40,39 @@ def draw_polygon(t, sides, length, depth):
         t.right(angle)
 
 
-# ----- user input with simple checking -----
-sides = int(input("Enter number of sides (3 or more): "))
+# ----------- User Input (with validation) -----------
+
+sides = int(input("Enter the number of sides (3 or more): "))
 while sides < 3:
     sides = int(input("Please enter 3 or more sides: "))
 
-length = int(input("Enter side length (positive number): "))
+length = float(input("Enter the side length (positive number): "))
 while length <= 0:
-    length = int(input("Please enter a positive number: "))
+    length = float(input("Please enter a positive number: "))
 
-depth = int(input("Enter recursion depth (0 or more): "))
+depth = int(input("Enter the recursion depth (0 or more): "))
 while depth < 0:
     depth = int(input("Please enter 0 or more: "))
 
 
-# ----- turtle setup -----
+# ----------- Turtle Setup -----------
+
 screen = turtle.Screen()
 screen.bgcolor("white")
 
 t = turtle.Turtle()
 t.speed(0)
+t.hideturtle()
 
-# Moving the turtle helps keep the shape visible on screen
+# Move turtle so the shape fits on the screen
 t.penup()
-t.goto(-length / 2, length / 2)
+t.goto(-length / 2, length / 3)
 t.pendown()
 
+# Draw the pattern
 draw_polygon(t, sides, length, depth)
 
 turtle.done()
-
 
 
     
