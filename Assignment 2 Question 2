@@ -64,3 +64,27 @@ print("No CSV files found in the folder.")
 # This list will hold data from all CSV files before they are merged
 
         combined_data.append(df_long)
+
+    # All yearly datasets are merged into a single table
+    all_data = pd.concat(combined_data, ignore_index=True)
+
+    # Rows with missing temperature values are removed
+    all_data = all_data.dropna(subset=["Temperature"])
+
+    # A new column is added to identify the season for each month
+    all_data["Season"] = all_data["Month"].apply(find_season)
+
+    return all_data
+
+
+
+# Calculates average temperature for each season
+
+def seasonal_average(all_data):
+    # Temperatures are grouped by season and averaged
+    season_avg = all_data.groupby("Season")["Temperature"].mean()
+
+    # Results are written to the required output file
+    with open("average_temp.txt", "w", encoding="utf-8") as f:
+        for season in SEASON_ORDER:
+            f.write(f"{season}: {season_avg[season]:.1f}°C\n") 
