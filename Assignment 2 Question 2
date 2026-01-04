@@ -139,9 +139,8 @@ def largest_temperature_range(all_data):
 
 def temperature_stability(all_data):
 
-# We use standard deviation because it is a reliable measure of
-    # variability. A low value means temperatures stay fairly consistent,
-    # while a high value indicates large fluctuations.
+# We use standard deviation because it is a reliable measure of variability. 
+# A low value means temperatures stay fairly consistent, while a high value indicates large fluctuations.
     station_std = all_data.groupby("STATION_NAME")["Temperature"].std()
 
     # The smallest and largest standard deviation values are identified
