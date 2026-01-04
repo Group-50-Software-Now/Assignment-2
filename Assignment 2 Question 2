@@ -67,13 +67,13 @@ print("No CSV files found in the folder.")
 
     combined_data = []
 
-# Each file is read and reshaped into a usable format
+#Each file is read and reshaped into a usable format
 
     for file_path in csv_files:
         df = pd.read_csv(file_path)
 
-# Monthly temperature columns are converted into
-        # one column called 'Temperature' with a matching 'Month'
+#Monthly temperature columns are converted into
+        #one column called 'Temperature' with a matching 'Month'
 
         df_long = df.melt(
             id_vars=["STATION_NAME", "STN_ID", "LAT", "LON"],
@@ -82,11 +82,11 @@ print("No CSV files found in the folder.")
             value_name="Temperature"
         )
 
-# This list will hold data from all CSV files before they are merged
+#This list will hold data from all CSV files before they are merged
 
         combined_data.append(df_long)
 
-    # All yearly datasets are merged into a single table
+    #All yearly datasets are merged into a single table
     all_data = pd.concat(combined_data, ignore_index=True)
 
     # Rows with missing temperature values are removed
