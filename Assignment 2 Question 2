@@ -134,9 +134,9 @@ def largest_temperature_range(all_data):
                 f"(Max: {row['max']:.1f}°C, Min: {row['min']:.1f}°C)\n"
             )
 
-# ------------------------------------------------------------
+
 # Finds the most stable and most variable stations
-# ------------------------------------------------------------
+
 def temperature_stability(all_data):
     # Standard deviation is calculated for each station
     station_std = all_data.groupby("STATION_NAME")["Temperature"].std()
