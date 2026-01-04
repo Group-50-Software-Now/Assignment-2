@@ -3,20 +3,27 @@ import turtle
 
 def draw_edge(t, length, depth):
     """
-    Recursively draws one edge with an inward triangular indentation.
+    This function draws one side of the shape.
+    Recursion is used because the same pattern needs to repeat
+    on smaller and smaller parts of the line.
     """
-    # Base case: draw a straight line when no more recursion is needed
+
+    # This condition is necessary to stop the recursion,
+    # otherwise the function would keep calling itself forever.
     if depth == 0:
         t.forward(length)
         return
 
-    # Each edge is divided into three equal parts
+    # Dividing the line into three parts helps keep the shape balanced
+    # and makes the recursive pattern look even on all sides.
     part = length / 3
 
-    # First segment
+    # Draw the first section before making any turns
     draw_edge(t, part, depth - 1)
 
-    # Inward indentation using an equilateral triangle
+    # These turns create an inward triangular shape.
+    # The angles are chosen so the turtle ends up facing
+    # the correct direction again after the indentation.
     t.right(60)
     draw_edge(t, part, depth - 1)
 
@@ -25,14 +32,19 @@ def draw_edge(t, length, depth):
 
     t.right(60)
 
-    # Final segment
+    # Drawing the final section completes one full edge
+    # while keeping the overall direction unchanged.
     draw_edge(t, part, depth - 1)
 
 
 def draw_polygon(t, sides, length, depth):
     """
-    Draws a regular polygon where each side uses the recursive edge pattern.
+    This function draws a regular polygon.
+    Each side uses the same recursive edge so the pattern
+    stays consistent around the shape.
     """
+
+    # A regular polygon needs equal turns so it closes properly.
     angle = 360 / sides
 
     for _ in range(sides):
@@ -42,34 +54,57 @@ def draw_polygon(t, sides, length, depth):
 
 # ----------- User Input (with validation) -----------
 
-sides = int(input("Enter the number of sides (3 or more): "))
-while sides < 3:
-    sides = int(input("Please enter 3 or more sides: "))
+# Input validation is added so the program does not crash
+# if the user enters something invalid by mistake.
 
-length = float(input("Enter the side length (positive number): "))
-while length <= 0:
-    length = float(input("Please enter a positive number: "))
+while True:
+    try:
+        sides = int(input("Enter the number of sides (3 or more): "))
+        if sides < 3:
+            print("A polygon needs at least 3 sides.")
+            continue
+        break
+    except ValueError:
+        print("Please enter a whole number.")
 
-depth = int(input("Enter the recursion depth (0 or more): "))
-while depth < 0:
-    depth = int(input("Please enter 0 or more: "))
+while True:
+    try:
+        length = float(input("Enter the side length (positive number): "))
+        if length <= 0:
+            print("The length must be greater than zero.")
+            continue
+        break
+    except ValueError:
+        print("Please enter a valid number.")
+
+while True:
+    try:
+        depth = int(input("Enter the recursion depth (0 or more): "))
+        if depth < 0:
+            print("Depth cannot be negative.")
+            continue
+        break
+    except ValueError:
+        print("Please enter a whole number.")
 
 
 # ----------- Turtle Setup -----------
 
+# A plain background makes it easier to see the pattern clearly.
 screen = turtle.Screen()
 screen.bgcolor("white")
 
 t = turtle.Turtle()
-t.speed(0)
-t.hideturtle()
+t.speed(0)       # Using the fastest speed helps recursion finish quicker
+t.hideturtle()   # Hiding the turtle makes the final design look cleaner
 
-# Move turtle so the shape fits on the screen
+# Moving the turtle slightly helps keep the drawing centred on the screen,
+# especially when larger shapes or deeper recursion is used.
 t.penup()
 t.goto(-length / 2, length / 3)
 t.pendown()
 
-# Draw the pattern
+# Start drawing the polygon with the recursive pattern
 draw_polygon(t, sides, length, depth)
 
 turtle.done()
