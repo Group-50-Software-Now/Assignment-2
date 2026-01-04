@@ -135,7 +135,8 @@ def largest_temperature_range(all_data):
             )
 
 
-# Finds the most stable and most variable stations
+# This function analyses temperature data to understand how consistent
+# or fluctuating each weather station’s readings are over time.
 
 def temperature_stability(all_data):
     # Standard deviation is calculated for each station
@@ -145,5 +146,10 @@ def temperature_stability(all_data):
     smallest_std = station_std.min()
     largest_std = station_std.max()
 
+ # Stations with the smallest standard deviation are considered
+    # the most stable because their temperatures change very little.
     most_stable_stations = station_std[station_std == smallest_std]
+
+# Stations with the largest standard deviation are the most variable,
+    # showing significant temperature changes over the measured period.
     most_variable_stations = station_std[station_std == largest_std]
