@@ -5,7 +5,7 @@ import glob
 #used to collect all CSV files in a folder automatically
 
 import pandas as pd 
-# to simplify reading csvs + grouping calculations(mean/std/max/min)
+#to simplify reading csvs + grouping calculations(mean/std/max/min)
 
 TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"  
 # used to path the folder that contains all the temprature CSV files
