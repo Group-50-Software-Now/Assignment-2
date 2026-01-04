@@ -1,21 +1,32 @@
-import os #needed for portable file/folder paths across windows/mac
-import glob #used to collect all CSV files in a folder automatically
-import pandas as pd # to simplify reading csvs + grouping calculations(mean/std/max/min)
+import os
+#needed for portable file/folder paths across windows/mac
 
-TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"    # used to path the folder that contains all the temprature CSV files
+import glob
+#used to collect all CSV files in a folder automatically
+
+import pandas as pd 
+# to simplify reading csvs + grouping calculations(mean/std/max/min)
+
+TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"  
+# used to path the folder that contains all the temprature CSV files
+
 # file path used by Khushi id:S398777
 #TEMPERATURE_FOLDER = r"/Users/khushi/Assignment_2/temperatures" 
+
+
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
-]    #used for the dataset stores tempratures in these 12 month columns
+]  
+#used for the dataset stores tempratures in these 12 month columns
 
 SEASONS = {
     "Summer": ["December", "January", "February"],
     "Autumn": ["March", "April", "May"],
     "Winter": ["June", "July", "August"],
     "Spring": ["September", "October", "November"]
-}  #used to mapp the cleanest way to convert months into australian seasons
+} 
+#used to mapp the cleanest way to convert months into australian seasons
 
 SEASON_ORDER = ["Summer", "Autumn", "Winter", "Spring"]  #used to ensure output order is stable and predictable
 
