@@ -30,12 +30,22 @@ SEASONS = {
 
 SEASON_ORDER = ["Summer", "Autumn", "Winter", "Spring"]  #used to ensure output order is stable and predictable
 
-def find_season(month): #isolate month-season mapping so it can be reused consistently
+def find_season(month): 
+#isolate month-season mapping so it can be reused consistently
+
 #convert month name into Australian season; none means unexpected month name.
-    for season, months in SEASONS.items(): # iterate mapping instead  of hardcoded if/else chain
-        if month in months: #membership test is simple and readable for this small list
-            return season  # as soon as we find it , we stop (efficient + clear)
-    return None # signals invalid month header/data instead of silently guessing
+
+    for season, months in SEASONS.items():
+# iterate mapping instead  of hardcoded if/else chain
+
+        if month in months: 
+#membership test is simple and readable for this small list
+
+            return season 
+# as soon as we find it , we stop (efficient + clear)
+
+    return None 
+# signals invalid month header/data instead of silently guessing
 
 
 # Reads all CSV files and combines them into one dataset
