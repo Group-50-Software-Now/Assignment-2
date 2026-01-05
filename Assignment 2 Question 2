@@ -161,7 +161,8 @@ def temperature_stability(all_data):
     smallest_std = station_std.min()
     largest_std = station_std.max()
 
- # Stations with the smallest standard deviation are considered the most stable because their temperatures change very little.
+# Stations with the smallest standard deviation are considered the most stable because 
+#their temperatures change very little.
     most_stable_stations = station_std[station_std == smallest_std]
 
 # Stations with the largest standard deviation are the most variable,
@@ -194,5 +195,5 @@ def main():
 
 #Ensures the program runs only when this file is executed directly.
 
-if __name__ == "__main__":
+if __name__ == "__main__"
     main()
