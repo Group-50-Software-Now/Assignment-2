@@ -1,11 +1,11 @@
 import os
-#needed for portable file/folder paths across windows/mac
+#needed for portable file/folder paths across windows/mac.
 
 import glob
-#used to collect all CSV files in a folder automatically
+#used to collect all CSV files in a folder automatically.
 
 import pandas as pd 
-#to simplify reading csvs + grouping calculations(mean/std/max/min)
+#to simplify reading csvs + grouping calculations(mean/std/max/min).
 
 #This program is used to analyses temprature data from multiple years.
 #Each CSV file has been used to represent one year of data.
@@ -13,9 +13,9 @@ import pandas as pd
 #combines them, and performs the required calculations.
 
 TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"  
-#used to path the folder that contains all the temprature CSV files
+#used to path the folder that contains all the temprature CSV files.
 
-#file path used by Khushi id:S398777
+#file path used by Khushi id:S398777.
 #TEMPERATURE_FOLDER = r"/Users/khushi/Assignment_2/temperatures" 
 
 
@@ -31,54 +31,54 @@ SEASONS = {
     "Winter": ["June", "July", "August"],
     "Spring": ["September", "October", "November"]
 } 
-#used to mapp the cleanest way to convert months into australian seasons
+#used to mapp the cleanest way to convert months into australian seasons.
 
 SEASON_ORDER = ["Summer", "Autumn", "Winter", "Spring"]  #used to ensure output order is stable and predictable
 
 def find_season(month): 
-#isolate month-season mapping so it can be reused consistently
+#isolate month-season mapping so it can be reused consistently.
 
 #convert month name into Australian season; none means unexpected month name.
 
     for season, months in SEASONS.items():
-#iterate mapping instead  of hardcoded if/else chain
+#iterate mapping instead  of hardcoded if/else chain.
 
         if month in months: 
-#membership test is simple and readable for this small list
+#membership test is simple and readable for this small list.
 
             return season 
-#as soon as we find it , we stop (efficient + clear)
+#as soon as we find it , we stop (efficient + clear).
 
     return None 
-#signals invalid month header/data instead of silently guessing
+#signals invalid month header/data instead of silently guessing.
 
 
-#Reads all CSV files and combines them into one dataset
+#Reads all CSV files and combines them into one dataset.
 
 def load_all_years_data(folder_path):
 
-#Look through the given folder and gather every CSV file so
-#data from multiple years can be processed together in one step
-#All CSV files in the folder are collected
+#Look through the given folder and gather every CSV file so.
+#data from multiple years can be processed together in one step.
+#All CSV files in the folder are collected.
 
     csv_files = glob.glob(os.path.join(folder_path, "*.csv"))
 
     if len(csv_files) == 0:
 
-#Stop early if the folder has no data files, since there is nothing meaningful to load or combine
+#Stop early if the folder has no data files, since there is nothing meaningful to load or combine.
         
 print("No CSV files found in the folder.")
         return None
 
     combined_data = []
 
-#Each file is read and reshaped into a usable format
+#Each file is read and reshaped into a usable format.
 
     for file_path in csv_files:
         df = pd.read_csv(file_path)
 
-#Monthly temperature columns are converted into
-        #one column called 'Temperature' with a matching 'Month'
+#Monthly temperature columns are converted into.
+        #one column called 'Temperature' with a matching 'Month'.
 
         df_long = df.melt(
             id_vars=["STATION_NAME", "STN_ID", "LAT", "LON"],
@@ -87,51 +87,51 @@ print("No CSV files found in the folder.")
             value_name="Temperature"
         )
 
-#This list will hold data from all CSV files before they are merged
+#This list will hold data from all CSV files before they are merged.
 
         combined_data.append(df_long)
 
-    #All yearly datasets are merged into a single table
+    #All yearly datasets are merged into a single table.
     all_data = pd.concat(combined_data, ignore_index=True)
 
-    # Rows with missing temperature values are removed
+    # Rows with missing temperature values are removed.
     all_data = all_data.dropna(subset=["Temperature"])
 
-    # A new column is added to identify the season for each month
+    # A new column is added to identify the season for each month.
     all_data["Season"] = all_data["Month"].apply(find_season)
 
     return all_data
 
 
 
-# Calculating average temperature for each season
+# Calculating average temperature for each season.
 
 def seasonal_average(all_data):
-    # Temperatures are grouped by season and averaged
+    # Temperatures are grouped by season and averaged.
     season_avg = all_data.groupby("Season")["Temperature"].mean()
 
-    # Results are written to the required output file is a open 
+    # Results are written to the required output file is a open.
     with open("average_temp.txt", "w", encoding="utf-8") as f:
         for season in SEASON_ORDER:
             f.write(f"{season}: {season_avg[season]:.1f}°C\n") 
 
 
-# Finds the stations with the largest temperature range
+# Finds the stations with the largest temperature range.
 
 def largest_temperature_range(all_data):
-    # Maximum and minimum temperatures are calculated per station
+    # Maximum and minimum temperatures are calculated per station.
     station_stats = all_data.groupby("STATION_NAME")["Temperature"].agg(["max", "min"])
 
-    # Temperature range is calculated as max minus min
+    # Temperature range is calculated as max minus min.
     station_stats["range"] = station_stats["max"] - station_stats["min"]
 
-    # largest range value is identified as range 
+    # largest range value is identified as range. 
     largest_range_value = station_stats["range"].max()
 
-    # All stations matching this range are selected
+    # All stations matching this range are selected.
     largest_range_stations = station_stats[station_stats["range"] == largest_range_value]
 
-    # Results are written to the output file 
+    # Results are written to the output file.
     with open("largest_temp_range_station.txt", "w", encoding="utf-8") as f:
         for station, row in largest_range_stations.iterrows():
             f.write(
@@ -148,7 +148,7 @@ def temperature_stability(all_data):
 # A low value means temperatures stay fairly consistent, while a high value indicates large fluctuations.
     station_std = all_data.groupby("STATION_NAME")["Temperature"].std()
 
-    # The smallest and largest standard deviation values are identified
+    # The smallest and largest standard deviation values are identified.
     smallest_std = station_std.min()
     largest_std = station_std.max()
 
@@ -157,10 +157,11 @@ def temperature_stability(all_data):
 
 # Stations with the largest standard deviation are the most variable,
 
-    most_variable_stations = station_std[station_std == largest_std]
+    most_variable_stations = station_std[station_std == largest_std].
 
 
-#Results are written to the output file
+#Results are written to the output file.
+
 with open("temperature_stability_stations.txt", "w", encoding="utf-8") as f:
         for station, std in most_stable_stations.items():
             f.write(f"Most Stable: {station}: StdDev {std:.1f}°C\n")
@@ -168,7 +169,8 @@ with open("temperature_stability_stations.txt", "w", encoding="utf-8") as f:
         for station, std in most_variable_stations.items():
             f.write(f"Most Variable: {station}: StdDev {std:.1f}°C\n")
 
-# main function that runs the full program
+# main function that runs the full program.
+
 def main():
     all_data = load_all_years_data(TEMPERATURE_FOLDER)
 
@@ -181,6 +183,7 @@ def main():
 
     print("Processing complete. Output files have been created.")
 
-#Ensures the program runs only when this file is executed directly
+#Ensures the program runs only when this file is executed directly.
+
 if __name__ == "__main__":
     main()
