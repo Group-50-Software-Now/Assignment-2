@@ -12,6 +12,7 @@ import pandas as pd
 #Also this program reads all CSV files in the tempratures folder,
 #combines them, and performs the required calculations.
 
+
 TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"  
 #used to path the folder that contains all the temprature CSV files.
 
@@ -23,6 +24,8 @@ MONTHS = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ]  
+
+
 #used for the dataset stores tempratures in these 12 month columns
 
 SEASONS = {
@@ -31,7 +34,9 @@ SEASONS = {
     "Winter": ["June", "July", "August"],
     "Spring": ["September", "October", "November"]
 } 
+
 #used to mapp the cleanest way to convert months into australian seasons.
+
 
 SEASON_ORDER = ["Summer", "Autumn", "Winter", "Spring"]  #used to ensure output order is stable and predictable
 
