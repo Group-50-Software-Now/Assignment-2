@@ -153,3 +153,13 @@ def temperature_stability(all_data):
 # Stations with the largest standard deviation are the most variable,
 
     most_variable_stations = station_std[station_std == largest_std]
+
+
+#Results are written to the output file
+with open("temperature_stability_stations.txt", "w", encoding="utf-8") as f:
+        for station, std in most_stable_stations.items():
+            f.write(f"Most Stable: {station}: StdDev {std:.1f}°C\n")
+
+        for station, std in most_variable_stations.items():
+            f.write(f"Most Variable: {station}: StdDev {std:.1f}°C\n")
+
