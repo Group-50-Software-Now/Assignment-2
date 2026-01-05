@@ -195,5 +195,5 @@ def main():
 
 #Ensures the program runs only when this file is executed directly.
 
-if __name__ == "__main__"
+if __name__ == "__main__":
     main()
