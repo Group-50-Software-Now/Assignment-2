@@ -176,3 +176,6 @@ def main():
 
     print("Processing complete. Output files have been created.")
 
+#Ensures the program runs only when this file is executed directly
+if __name__ == "__main__":
+    main()
