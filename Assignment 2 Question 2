@@ -7,6 +7,9 @@ import glob
 import pandas as pd 
 #to simplify reading csvs + grouping calculations(mean/std/max/min)
 
+#This program is used to analyses temprature data from multiple years.
+
+
 TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"  
 #used to path the folder that contains all the temprature CSV files
 
