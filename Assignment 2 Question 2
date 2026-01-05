@@ -163,3 +163,16 @@ with open("temperature_stability_stations.txt", "w", encoding="utf-8") as f:
         for station, std in most_variable_stations.items():
             f.write(f"Most Variable: {station}: StdDev {std:.1f}°C\n")
 
+# main function that runs the full program
+def main():
+    all_data = load_all_years_data(TEMPERATURE_FOLDER)
+
+    if all_data is None:
+        return
+
+    seasonal_average(all_data)
+    largest_temperature_range(all_data)
+    temperature_stability(all_data)
+
+    print("Processing complete. Output files have been created.")
+
