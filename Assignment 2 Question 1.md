@@ -1,57 +1,20 @@
-# Encryption
+# Encryption.py
 
-def shift_char(char, shift):
-    # We use modulo so letters wrap around instead of going out of range
-    
-    if char.islower():
-        return chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
+## Encryption rules exactly as given in the question
 
-    if char.isupper():
-        return chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+RAW_FILE = r"D:\CDU Materials\summer semester 2025\Software Now\Assessment 2\Assign 2\raw_text.txt"
+ENCRYPTED_FILE = r"D:\CDU Materials\summer semester 2025\Software Now\Assessment 2\Assign 2\encrypted_text.txt"
 
-    return char
-
-
-def encrypt_text(text, shift1, shift2):
-    # We save which rule was used for each character
-    # because during decryption we need to undo the exact same rule
-    encrypted_text = []
-    key = []
-
-    for char in text:
-        if char.islower():
-            if char <= 'm':
-                encrypted_text.append(shift_char(char, shift1 * shift2))
-                key.append('0')
-            else:
-                encrypted_text.append(shift_char(char, -(shift1 + shift2)))
-                key.append('1')
-
-        elif char.isupper():
-            if char <= 'M':
-                encrypted_text.append(shift_char(char, -shift1))
-                key.append('2')
-            else:
-                encrypted_text.append(shift_char(char, shift2 ** 2))
-                key.append('3')
-
+def encrypt_char(ch, shift1, shift2):
+    # lowercase letters
+    if 'a' <= ch <= 'z':
+        pos = ord(ch) - ord('a')
+        if 'a' <= ch <= 'm':
+            pos = (pos + shift1 * shift2) % 26
         else:
-            # Other characters should stay exactly the same
-            encrypted_text.append(char)
-            key.append('X')
+            pos = (pos - (shift1 + shift2)) % 26
+        return chr(pos + ord('a'))
 
-    return ''.join(encrypted_text), ''.join(key)
-
-
-def encrypt_file(shift1, shift2, raw_file_path):
-    # Read the original text file
-    with open(raw_file_path, "r", encoding="utf-8") as file:
-        text = file.read()
-
-    encrypted_text, key = encrypt_text(text, shift1, shift2)
-
-    # Write the key first so decryption knows what to do
-
-    with open("encrypted_text.txt", "w", encoding="utf-8") as file:
-        file.write(key + "\n")
-        file.write(encrypted_text)
+    # uppercase letters
+    if 'A' <= ch <= 'Z':
+        pos = ord(ch) - ord('A')
