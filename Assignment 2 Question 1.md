@@ -7,7 +7,7 @@ ENCRYPTED_FILE = r"D:\CDU Materials\summer semester 2025\Software Now\Assessment
 
 def encrypt_char(ch, shift1, shift2):
     # lowercase letters
-    if 'a' <= ch <= 'z':
+      if 'a' <= ch <= 'z':
         pos = ord(ch) - ord('a')
         if 'a' <= ch <= 'm':
             pos = (pos + shift1 * shift2) % 26
@@ -16,5 +16,5 @@ def encrypt_char(ch, shift1, shift2):
         return chr(pos + ord('a'))
 
     # uppercase letters
-    if 'A' <= ch <= 'Z':
+       if 'A' <= ch <= 'Z':
         pos = ord(ch) - ord('A')
