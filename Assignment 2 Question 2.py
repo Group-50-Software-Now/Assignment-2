@@ -74,3 +74,15 @@ def load_all_years_data(folder_path):
     all_data["Season"] = all_data["Month"].apply(find_season)
 
     return all_data
+
+
+# Calculates average temperature for each season
+
+def seasonal_average(all_data):
+    # Temperatures are grouped by season and averaged
+    season_avg = all_data.groupby("Season")["Temperature"].mean()
+
+    # Results are written to the required output file
+    with open("average_temp.txt", "w", encoding="utf-8") as f:
+        for season in SEASON_ORDER:
+            f.write(f"{season}: {season_avg[season]:.1f}°C\n")
