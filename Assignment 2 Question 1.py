@@ -12,3 +12,15 @@ def encrypt_char(ch, shift1, shift2):
         else:
             pos = (pos - (shift1 + shift2)) % 26
         return chr(pos + ord('a'))
+        
+       # uppercase letters
+    if 'A' <= ch <= 'Z':
+        pos = ord(ch) - ord('A')
+        if 'A' <= ch <= 'M':
+            pos = (pos - shift1) % 26
+        else:
+            pos = (pos + (shift2 ** 2)) % 26
+        return chr(pos + ord('A'))
+
+    # other characters unchanged
+    return ch
