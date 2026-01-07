@@ -52,3 +52,25 @@ def load_all_years_data(folder_path):
     # Each file is read and reshaped into a usable format
     for file_path in csv_files:
         df = pd.read_csv(file_path)
+
+ # Monthly temperature columns are converted into
+        # one column called 'Temperature' with a matching 'Month'
+        df_long = df.melt(
+            id_vars=["STATION_NAME", "STN_ID", "LAT", "LON"],
+            value_vars=MONTHS,
+            var_name="Month",
+            value_name="Temperature"
+        )
+
+        combined_data.append(df_long)
+
+    # All yearly datasets are merged into a single table
+    all_data = pd.concat(combined_data, ignore_index=True)
+
+    # Rows with missing temperature values are removed
+    all_data = all_data.dropna(subset=["Temperature"])
+
+    # A new column is added to identify the season for each month
+    all_data["Season"] = all_data["Month"].apply(find_season)
+
+    return all_data
