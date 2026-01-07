@@ -37,3 +37,18 @@ def find_season(month):
         if month in months:
             return season
     return None
+
+# Reads all CSV files and combines them into one dataset
+def load_all_years_data(folder_path):
+    # All CSV files in the folder are collected
+    csv_files = glob.glob(os.path.join(folder_path, "*.csv"))
+
+    if len(csv_files) == 0:
+        print("No CSV files found in the folder.")
+        return None
+
+    combined_data = []
+
+    # Each file is read and reshaped into a usable format
+    for file_path in csv_files:
+        df = pd.read_csv(file_path)
