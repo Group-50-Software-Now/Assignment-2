@@ -25,3 +25,15 @@ SEASONS = {
     "Spring": ["September", "October", "November"]
 }
 
+SEASON_ORDER = ["Summer", "Autumn", "Winter", "Spring"]
+
+
+
+# Converts a month name into its corresponding season
+
+def find_season(month):
+    # Each month is checked against the season dictionary
+    for season, months in SEASONS.items():
+        if month in months:
+            return season
+    return None
