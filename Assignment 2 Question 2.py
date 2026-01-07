@@ -86,3 +86,27 @@ def seasonal_average(all_data):
     with open("average_temp.txt", "w", encoding="utf-8") as f:
         for season in SEASON_ORDER:
             f.write(f"{season}: {season_avg[season]:.1f}°C\n")
+
+
+# Finds the station(s) with the largest temperature range
+
+def largest_temperature_range(all_data):
+    # Maximum and minimum temperatures are calculated per station
+    station_stats = all_data.groupby("STATION_NAME")["Temperature"].agg(["max", "min"])
+
+    # Temperature range is calculated as max minus min
+    station_stats["range"] = station_stats["max"] - station_stats["min"]
+
+    # The largest range value is identified
+    largest_range_value = station_stats["range"].max()
+
+    # All stations matching this range are selected
+    largest_range_stations = station_stats[station_stats["range"] == largest_range_value]
+
+    # Results are written to the output file
+    with open("largest_temp_range_station.txt", "w", encoding="utf-8") as f:
+        for station, row in largest_range_stations.iterrows():
+            f.write(
+                f"{station}: Range {row['range']:.1f}°C "
+                f"(Max: {row['max']:.1f}°C, Min: {row['min']:.1f}°C)\n"
+            )
