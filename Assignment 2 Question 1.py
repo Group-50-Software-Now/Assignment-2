@@ -24,3 +24,15 @@ def encrypt_char(ch, shift1, shift2):
 
     # other characters unchanged
     return ch
+
+def encrypt_file(shift1, shift2):
+    with open(RAW_FILE, "r", encoding="utf-8") as f:
+        text = f.read()
+
+    encrypted = ""
+    for ch in text:
+        encrypted += encrypt_char(ch, shift1, shift2)
+
+    with open(ENCRYPTED_FILE, "w", encoding="utf-8") as f:
+        f.write(encrypted)
+
