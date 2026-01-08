@@ -110,3 +110,44 @@ def largest_temperature_range(all_data):
                 f"{station}: Range {row['range']:.1f}°C "
                 f"(Max: {row['max']:.1f}°C, Min: {row['min']:.1f}°C)\n"
             )
+
+# Finds the most stable and most variable stations
+
+def temperature_stability(all_data):
+    # Standard deviation is calculated for each station
+    station_std = all_data.groupby("STATION_NAME")["Temperature"].std()
+
+    # The smallest and largest standard deviation values are identified
+    smallest_std = station_std.min()
+    largest_std = station_std.max()
+
+    most_stable_stations = station_std[station_std == smallest_std]
+    most_variable_stations = station_std[station_std == largest_std]
+
+    # Results are written to the output file
+    with open("temperature_stability_stations.txt", "w", encoding="utf-8") as f:
+        for station, std in most_stable_stations.items():
+            f.write(f"Most Stable: {station}: StdDev {std:.1f}°C\n")
+
+        for station, std in most_variable_stations.items():
+            f.write(f"Most Variable: {station}: StdDev {std:.1f}°C\n")
+
+
+# Main function that runs the full program
+
+def main():
+    all_data = load_all_years_data(TEMPERATURE_FOLDER)
+
+    if all_data is None:
+        return
+
+    seasonal_average(all_data)
+    largest_temperature_range(all_data)
+    temperature_stability(all_data)
+
+    print("Processing complete. Output files have been created.")
+
+
+# Ensures the program runs only when this file is executed directly
+if __name__ == "__main__":
+    main()
