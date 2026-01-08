@@ -52,7 +52,7 @@ def draw_polygon(t, sides, length, depth):
         t.right(angle)
 
 
-# ----------- User Input (with validation) -----------
+# User Input (with validation) 
 
 # Input validation is added so the program does not crash
 # if the user enters something invalid by mistake.
@@ -88,7 +88,7 @@ while True:
         print("Please enter a whole number.")
 
 
-# ----------- Turtle Setup -----------
+# Turtle Setup 
 
 # A plain background makes it easier to see the pattern clearly.
 screen = turtle.Screen()
