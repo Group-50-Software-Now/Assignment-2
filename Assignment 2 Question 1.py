@@ -88,3 +88,21 @@ def verify_decryption():
         print("Decryption successful")
     else:
         print("Decryption failed")
+
+# main.py
+
+from encrypt import encrypt_file
+from decrypt import decrypt_file, verify_decryption
+
+print("=== Encryption and Decryption Program ===")
+
+shift1 = int(input("Enter shift1 value: "))
+shift2 = int(input("Enter shift2 value: "))
+
+encrypt_file(shift1, shift2)
+print("Encryption completed.")
+
+decrypt_file(shift1, shift2)
+print("Decryption completed.")
+
+verify_decryption()
