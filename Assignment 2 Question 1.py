@@ -36,7 +36,7 @@ def encrypt_file(shift1, shift2):
     with open(ENCRYPTED_FILE, "w", encoding="utf-8") as f:
         f.write(encrypted)
 
-
+#decryption.py
 
 # Decryption using inverse mapping (rules unchanged)
 
