@@ -2,45 +2,81 @@ import os
 import glob
 import pandas as pd
 
-# This program analyses temperature data from multiple years.
-# Each CSV file represents one year of data.
-# The program reads all CSV files in the temperatures folder,
-# combines them, and performs the required calculations.
+# Program Overview
 
+"""
+This program analyses historical temperature data collected over
+multiple years from CSV files.
+
+Each CSV file represents one year of temperature data recorded at
+different weather stations. The program combines all files into a
+single dataset and performs three main analyses:
+1. Seasonal average temperatures (Australian seasons)
+2. Stations with the largest temperature range
+3. Most stable and most variable temperature stations
+
+The results are written to separate output text files as required
+by the assignment specification.
+"""
 
 # Path to the folder that contains all the temperature CSV files
 TEMPERATURE_FOLDER = r"C:\Users\rauni\OneDrive\Desktop\HIT137_Assignment2\temperatures"
 
-# The dataset stores temperatures in these 12 month columns
+# List of month columns present in the dataset
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ]
 
-# Australian seasons and the months that belong to each season
+# Australian seasons mapped to their corresponding months
 SEASONS = {
     "Summer": ["December", "January", "February"],
     "Autumn": ["March", "April", "May"],
     "Winter": ["June", "July", "August"],
     "Spring": ["September", "October", "November"]
 }
-
+# Order used to display seasonal results consistently
 SEASON_ORDER = ["Summer", "Autumn", "Winter", "Spring"]
 
 
-
-# Converts a month name into its corresponding season
+# Function: find_season
 
 def find_season(month):
-    # Each month is checked against the season dictionary
+    """
+    Determines which Australian season a given month belongs to.
+
+    This function exists to convert month-based temperature data
+    into season-based data, which is required for calculating
+    seasonal averages.
+
+    Parameters:
+        month (str): Name of the month (e.g., "January")
+
+    Returns:
+        str: The corresponding season name, or None if not found
+    """
     for season, months in SEASONS.items():
         if month in months:
             return season
     return None
 
-# Reads all CSV files and combines them into one dataset
+# Function: load_all_years_data
 def load_all_years_data(folder_path):
-    # All CSV files in the folder are collected
+      """
+    Reads all yearly CSV files and combines them into a single dataset.
+
+    This function is necessary because the data is spread across
+    multiple files (one per year). It reshapes the monthly columns
+    into a long format so that temperature values can be analysed
+    consistently across months, seasons, and stations.
+
+    Parameters:
+        folder_path (str): Path to the directory containing CSV files
+
+    Returns:
+        pandas.DataFrame: A cleaned and combined dataset containing
+                          station details, month, season, and temperature
+    """
     csv_files = glob.glob(os.path.join(folder_path, "*.csv"))
 
     if len(csv_files) == 0:
@@ -53,8 +89,7 @@ def load_all_years_data(folder_path):
     for file_path in csv_files:
         df = pd.read_csv(file_path)
 
- # Monthly temperature columns are converted into
-        # one column called 'Temperature' with a matching 'Month'
+   # Convert wide monthly data into a long, analysis-friendly format
         df_long = df.melt(
             id_vars=["STATION_NAME", "STN_ID", "LAT", "LON"],
             value_vars=MONTHS,
@@ -64,22 +99,31 @@ def load_all_years_data(folder_path):
 
         combined_data.append(df_long)
 
-    # All yearly datasets are merged into a single table
+     # Merge all years into one dataset
     all_data = pd.concat(combined_data, ignore_index=True)
 
-    # Rows with missing temperature values are removed
+     # Remove rows with missing temperature values
     all_data = all_data.dropna(subset=["Temperature"])
 
-    # A new column is added to identify the season for each month
+   # Assign a season to each month for seasonal analysis
     all_data["Season"] = all_data["Month"].apply(find_season)
 
     return all_data
 
 
-# Calculates average temperature for each season
+# Function: seasonal_average
 
 def seasonal_average(all_data):
-    # Temperatures are grouped by season and averaged
+    """
+    Calculates the average temperature for each Australian season.
+
+    This function supports high-level climate analysis by summarising
+    temperature patterns across seasons rather than individual months.
+    The results are written to a text file in a clear, readable format.
+
+    Parameters:
+        all_data (pandas.DataFrame): Combined temperature dataset
+    """
     season_avg = all_data.groupby("Season")["Temperature"].mean()
 
     # Results are written to the required output file
@@ -88,10 +132,19 @@ def seasonal_average(all_data):
             f.write(f"{season}: {season_avg[season]:.1f}°C\n")
 
 
-# Finds the station(s) with the largest temperature range
+# Function: largest_temperature_range
 
 def largest_temperature_range(all_data):
-    # Maximum and minimum temperatures are calculated per station
+     """
+    Identifies the weather station(s) with the largest temperature range.
+
+    The temperature range (maximum minus minimum) helps highlight
+    stations that experience the most extreme climate variations.
+    This is useful for understanding regional climate behaviour.
+
+    Parameters:
+        all_data (pandas.DataFrame): Combined temperature dataset
+    """
     station_stats = all_data.groupby("STATION_NAME")["Temperature"].agg(["max", "min"])
 
     # Temperature range is calculated as max minus min
