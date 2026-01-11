@@ -164,10 +164,19 @@ def largest_temperature_range(all_data):
                 f"(Max: {row['max']:.1f}°C, Min: {row['min']:.1f}°C)\n"
             )
 
-# Finds the most stable and most variable stations
+# Function: temperature_stability
 
 def temperature_stability(all_data):
-    # Standard deviation is calculated for each station
+    """
+    Determines the most stable and most variable temperature stations.
+
+    Standard deviation is used as a measure of stability. A lower
+    standard deviation indicates consistent temperatures, while a
+    higher value indicates greater fluctuation over time.
+
+    Parameters:
+        all_data (pandas.DataFrame): Combined temperature dataset
+    """
     station_std = all_data.groupby("STATION_NAME")["Temperature"].std()
 
     # The smallest and largest standard deviation values are identified
@@ -186,9 +195,19 @@ def temperature_stability(all_data):
             f.write(f"Most Variable: {station}: StdDev {std:.1f}°C\n")
 
 
-# Main function that runs the full program
-
+# Function: main
 def main():
+     """
+    Acts as the entry point for the program.
+
+    This function coordinates the overall workflow by:
+    - Loading and cleaning the data
+    - Running all required analyses
+    - Producing the final output files
+
+    Keeping this logic in one place improves readability and
+    makes the program easier to maintain and test.
+    """
     all_data = load_all_years_data(TEMPERATURE_FOLDER)
 
     if all_data is None:
