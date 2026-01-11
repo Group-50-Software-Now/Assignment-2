@@ -13,7 +13,7 @@ def draw_edge(t, length, depth):
     if depth == 0:
         t.forward(length)
         return
-
+ 
     # Dividing the line into three parts helps keep the shape balanced
     # and makes the recursive pattern look even on all sides.
     part = length / 3
