@@ -89,7 +89,13 @@ def verify_decryption():
     else:
         print("Decryption failed")
 
-# main.py
+"""
+main.py
+
+This is the entry point of the program.
+It collects user input, runs encryption,
+then performs decryption and verification.
+"""
 
 from encrypt import encrypt_file
 from decrypt import decrypt_file, verify_decryption
