@@ -112,3 +112,127 @@ def load_all_years_data(folder_path):
         print(f"[Error] load_all_years_data() failed: {e}")
         return None
 
+ # Calculates average temperature for each season
+
+# -----------------------------------------------------------
+ def seasonal_average(all_data):
+ """
+ Calculates the average temperature for each season and saves it to a file.
+ 
+ Using a loop for output writing makes the output order consistent
+ (Summer, Autumn, Winter, Spring) every time.
+ """
+ try:
+ season_avg = all_data.groupby("Season")["Temperature"].mean()
+ 
+ with open("average_temp.txt", "w", encoding="utf-8") as f:
+ # Using a while loop here just to show you can do it both ways (beginner style)
+ i = 0
+ while i < len(SEASON_ORDER):
+ season = SEASON_ORDER[i]
+ 
+ # Sometimes a season might be missing from data, so we handle it safely
+ if season in season_avg.index:
+ f.write(f"{season}: {season_avg[season]:.1f}°C\n")
+ else:
+ f.write(f"{season}: No data\n")
+ 
+ i += 1
+ 
+ except Exception as e:
+ print(f"[Error] seasonal_average() failed: {e}")
+ 
+ 
+
+ # Finds the station(s) with the largest temperature range
+
+ def largest_temperature_range(all_data):
+ """
+ Finds the station(s) with the largest temperature range (max - min)
+ and writes the result to a file.
+ 
+ Range is useful because it shows which station experiences the biggest
+ temperature swings in the dataset.
+ """
+ try:
+ station_stats = all_data.groupby("STATION_NAME")["Temperature"].agg(["max", "min"])
+ station_stats["range"] = station_stats["max"] - station_stats["min"]
+ 
+ largest_range_value = station_stats["range"].max()
+ largest_range_stations = station_stats[station_stats["range"] == largest_range_value]
+ 
+ with open("largest_temp_range_station.txt", "w", encoding="utf-8") as f:
+ # for loop is clean and readable for writing multiple results
+ for station, row in largest_range_stations.iterrows():
+ f.write(
+ f"{station}: Range {row['range']:.1f}°C "
+ f"(Max: {row['max']:.1f}°C, Min: {row['min']:.1f}°C)\n"
+ )
+ 
+ except Exception as e:
+ print(f"[Error] largest_temperature_range() failed: {e}")
+ 
+ 
+ 
+ # Finds the most stable and most variable stations
+
+ def temperature_stability(all_data):
+ """
+ Finds the most stable and most variable stations using standard deviation.
+ 
+ Beginner explanation:
+ - Standard deviation shows how much values spread out.
+ - Small std dev = temperatures are more consistent (stable).
+ - Large std dev = temperatures change a lot (variable).
+ """
+ try:
+ station_std = all_data.groupby("STATION_NAME")["Temperature"].std()
+ 
+ # Picking min and max gives us the most stable and most variable stations
+ smallest_std = station_std.min()
+ largest_std = station_std.max()
+ 
+ most_stable_stations = station_std[station_std == smallest_std]
+ most_variable_stations = station_std[station_std == largest_std]
+ 
+ with open("temperature_stability_stations.txt", "w", encoding="utf-8") as f:
+ for station, std in most_stable_stations.items():
+ f.write(f"Most Stable: {station}: StdDev {std:.1f}°C\n")
+ 
+ for station, std in most_variable_stations.items():
+ f.write(f"Most Variable: {station}: StdDev {std:.1f}°C\n")
+ 
+ except Exception as e:
+ print(f"[Error] temperature_stability() failed: {e}")
+ 
+ # Main function that runs the full program
+
+ def main():
+ """
+ Runs the full temperature analysis program.
+ 
+ The try/except here is like a safety net:
+ if something unexpected happens, we show the error message
+ instead of crashing with a long traceback.
+ """
+ try:
+ all_data = load_all_years_data(TEMPERATURE_FOLDER)
+ 
+ # If loading failed, we stop politely
+ if all_data is None:
+ return
+ 
+ seasonal_average(all_data)
+ largest_temperature_range(all_data)
+ temperature_stability(all_data)
+ 
+ print("Processing complete. Output files have been created.")
+ 
+ except Exception as e:
+ print(f"[Error] main() failed: {e}")
+ 
+ 
+ # Ensures the program runs only when this file is executed directly
+ if __name__ == "__main__":
+ main()
+     
