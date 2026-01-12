@@ -1,52 +1,81 @@
 import turtle
 
+"""
+This program uses Python Turtle graphics to draw a polygon.
+Each side of the polygon is drawn using a recursive pattern,
+which creates an inward triangular design.
+
+The user can control:
+- Number of sides
+- Length of each side
+- Depth of recursion
+"""
+
 
 def draw_edge(t, length, depth):
     """
-    This function draws one side of the shape.
-    Recursion is used because the same pattern needs to repeat
-    on smaller and smaller parts of the line.
+    Draws one side (edge) of the shape using recursion.
+
+    Parameters:
+    t      : turtle object used for drawing
+    length : length of the current edge
+    depth  : recursion depth (controls how detailed the pattern is)
+
+    Why recursion is used:
+    The same drawing pattern needs to repeat on smaller and smaller
+    parts of the line. Recursion makes this easier and cleaner
+    than using loops.
     """
 
-    # This condition is necessary to stop the recursion,
-    # otherwise the function would keep calling itself forever.
+    # Base case:
+    # If depth becomes 0, we stop calling the function again.
+    # This is very important, otherwise the program would run forever.
     if depth == 0:
         t.forward(length)
         return
  
-    # Dividing the line into three parts helps keep the shape balanced
-    # and makes the recursive pattern look even on all sides.
+    # The line is divided into three equal parts.
+    # This keeps the shape balanced and visually consistent.
     part = length / 3
 
-    # Draw the first section before making any turns
+    # Draw the first straight section
     draw_edge(t, part, depth - 1)
 
-    # These turns create an inward triangular shape.
-    # The angles are chosen so the turtle ends up facing
-    # the correct direction again after the indentation.
+    # Turn right to start creating the inward triangle
     t.right(60)
     draw_edge(t, part, depth - 1)
 
+    # Turn left more sharply to form the peak of the triangle
     t.left(120)
     draw_edge(t, part, depth - 1)
 
+    # Turn back to restore the original direction
     t.right(60)
 
-    # Drawing the final section completes one full edge
-    # while keeping the overall direction unchanged.
+    # Draw the final section to complete one full edge
     draw_edge(t, part, depth - 1)
 
 
 def draw_polygon(t, sides, length, depth):
     """
-    This function draws a regular polygon.
-    Each side uses the same recursive edge so the pattern
-    stays consistent around the shape.
+    Draws a regular polygon using the recursive edge function.
+
+    Parameters:
+    t      : turtle object
+    sides  : number of sides of the polygon
+    length : length of each side
+    depth  : recursion depth for each edge
+
+    Why this function exists:
+    It separates the idea of "drawing an edge" from
+    "drawing the full polygon", which makes the code
+    easier to understand and reuse.
     """
 
-    # A regular polygon needs equal turns so it closes properly.
+    # A regular polygon needs equal angles so it closes properly
     angle = 360 / sides
 
+    # Draw each side and rotate the turtle after each edge
     for _ in range(sides):
         draw_edge(t, length, depth)
         t.right(angle)
@@ -54,8 +83,13 @@ def draw_polygon(t, sides, length, depth):
 
 # User Input (with validation) 
 
-# Input validation is added so the program does not crash
-# if the user enters something invalid by mistake.
+"""
+Input validation is used so the program does not crash
+if the user types something invalid.
+
+Using while True allows the program to keep asking
+until correct input is provided.
+"""
 
 while True:
     try:
@@ -90,24 +124,29 @@ while True:
 
 # Turtle Setup 
 
-# A plain background makes it easier to see the pattern clearly.
+"""
+This section prepares the Turtle drawing environment.
+Keeping setup code separate makes the program easier
+to read and modify later.
+"""
+
+# Create the drawing window
 screen = turtle.Screen()
-screen.bgcolor("white")
+screen.bgcolor("white")  # Plain background makes the pattern clearer
 
+# Create the turtle
 t = turtle.Turtle()
-t.speed(0)       # Using the fastest speed helps recursion finish quicker
-t.hideturtle()   # Hiding the turtle makes the final design look cleaner
+t.speed(0)       # Fastest speed so recursion finishes quicker
+t.hideturtle()   # Hide the turtle so only the drawing is visible
 
-# Moving the turtle slightly helps keep the drawing centred on the screen,
-# especially when larger shapes or deeper recursion is used.
+# Move turtle slightly so the drawing stays centred on screen
 t.penup()
 t.goto(-length / 2, length / 3)
 t.pendown()
 
-# Start drawing the polygon with the recursive pattern
+# Start drawing the polygon using the recursive pattern
 draw_polygon(t, sides, length, depth)
 
+# Keep the window open until the user closes it
 turtle.done()
 
-
-    
