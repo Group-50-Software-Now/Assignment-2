@@ -80,59 +80,61 @@ def encrypt_file(shift1: int, shift2: int) -> None:
     with open(ENCRYPTED_FILE, "w", encoding="utf-8") as f:
         f.write(encrypted)
 
+"""
+decrypt.py
+----------
+This file is used to decrypt the encrypted_text.txt file back into decrypted_text.txt.
 
-#decryption.py
+It works by reversing the same rules that were used in encrypt.py.
+After decryption, another function can compare decrypted_text.txt with raw_text.txt
+to check if the decryption worked correctly.
+"""
 
-# Decryption using inverse mapping (rules unchanged)
+import os
 
-RAW_FILE = r"D:\CDU Materials\summer semester 2025\Software Now\Assessment 2\Assign 2\raw_text.txt"
-ENCRYPTED_FILE = r"D:\CDU Materials\summer semester 2025\Software Now\Assessment 2\Assign 2\encrypted_text.txt"
-DECRYPTED_FILE = r"D:\CDU Materials\summer semester 2025\Software Now\Assessment 2\Assign 2\decrypted_text.txt"
+# Getting the folder location where this python file is saved
+# (this helps so the program can find the text files easily)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-from encrypt import encrypt_char
-
-def decrypt_file(shift1, shift2):
-    # Build encryption maps
-    lower_map = {}
-    upper_map = {}
-
-    for c in "abcdefghijklmnopqrstuvwxyz":
-        lower_map[c] = encrypt_char(c, shift1, shift2)
-
-    for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-        upper_map[c] = encrypt_char(c, shift1, shift2)
-
-    # Reverse the maps
-    inv_lower = {v: k for k, v in lower_map.items()}
-    inv_upper = {v: k for k, v in upper_map.items()}
-
-    with open(ENCRYPTED_FILE, "r", encoding="utf-8") as f:
-        text = f.read()
-
-    decrypted = ""
-    for ch in text:
-        if 'a' <= ch <= 'z':
-            decrypted += inv_lower[ch]
-        elif 'A' <= ch <= 'Z':
-            decrypted += inv_upper[ch]
-        else:
-            decrypted += ch
-
-    with open(DECRYPTED_FILE, "w", encoding="utf-8") as f:
-        f.write(decrypted)
+# Building full file paths so it works on any computer as long as files are in the same folder
+RAW_FILE = os.path.join(BASE_DIR, "raw_text.txt")
+ENCRYPTED_FILE = os.path.join(BASE_DIR, "encrypted_text.txt")
+DECRYPTED_FILE = os.path.join(BASE_DIR, "decrypted_text.txt")
 
 
-def verify_decryption():
-    with open(RAW_FILE, "r", encoding="utf-8") as f:
-        original = f.read()
+def decrypt_char(ch: str, shift1: int, shift2: int) -> str:
+    """
+    Decrypt one single character using the reverse (opposite) of encrypt_char rules.
 
-    with open(DECRYPTED_FILE, "r", encoding="utf-8") as f:
-        decrypted = f.read()
+    Rules used here:
+    - Lowercase a-m are wrapped inside 13 letters (a..m)
+    - Lowercase n-z are wrapped inside 13 letters (n..z)
+    - Uppercase A-M are wrapped inside 13 letters (A..M)
+    - Uppercase N-Z are wrapped inside 13 letters (N..Z)
 
-    if original == decrypted:
-        print("Decryption successful")
-    else:
-        print("Decryption failed")
+    Any non-letter characters (spaces, punctuation, numbers) are returned unchanged.
+    """
+
+    # ----- lowercase a-m -----
+    if "a" <= ch <= "m":
+        offset = ord(ch) - ord("a")
+        s = (shift1 * shift2) % 13
+        new_offset = (offset - s) % 13
+        return chr(ord("a") + new_offset)
+
+    # ----- lowercase n-z -----
+    if "n" <= ch <= "z":
+        offset = ord(ch) - ord("n")
+        s = (shift1 + shift2) % 13
+        new_offset = (offset + s) % 13
+        return chr(ord("n") + new_offset)
+
+    # ----- uppercase A-M -----
+    if "A" <= ch <= "M":
+        offset = ord(ch) - ord("A")
+        s = shift1 % 13
+        new_offset = (offset + s) % 13
+        return chr(ord("A") + new_offset)
 
 """
 main.py
