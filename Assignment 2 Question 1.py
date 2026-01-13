@@ -136,6 +136,61 @@ def decrypt_char(ch: str, shift1: int, shift2: int) -> str:
         new_offset = (offset + s) % 13
         return chr(ord("A") + new_offset)
 
+# ----- uppercase N-Z -----
+    if "N" <= ch <= "Z":
+        offset = ord(ch) - ord("N")
+        s = (shift2 ** 2) % 13
+        new_offset = (offset - s) % 13
+        return chr(ord("N") + new_offset)
+
+    # If it is not a letter, we just return it as it is
+    return ch
+
+
+def decrypt_file(shift1: int, shift2: int) -> None:
+    """
+    Reads encrypted_text.txt, decrypts each character using decrypt_char(),
+    and writes the result into decrypted_text.txt.
+    """
+
+    # Reading encrypted file contents
+    with open(ENCRYPTED_FILE, "r", encoding="utf-8") as f:
+        encrypted_text = f.read()
+
+    # Decrypting every character one by one
+    decrypted = "".join(decrypt_char(ch, shift1, shift2) for ch in encrypted_text)
+
+    # Saving the decrypted text into a new file
+    with open(DECRYPTED_FILE, "w", encoding="utf-8") as f:
+        f.write(decrypted)
+
+
+def verify_decryption() -> bool:
+    """
+    Compares raw_text.txt and decrypted_text.txt.
+
+    Returns:
+        True  -> if they match exactly
+        False -> if they are different
+    """
+
+    # Reading the original raw file
+    with open(RAW_FILE, "r", encoding="utf-8") as f:
+        original = f.read()
+
+    # Reading the decrypted file
+    with open(DECRYPTED_FILE, "r", encoding="utf-8") as f:
+        decrypted = f.read()
+
+    # Checking if both are exactly the same
+    if original == decrypted:
+        print("Decryption successful: files match exactly.")
+        return True
+
+    print("Decryption failed: files do not match.")
+    return False
+
+
 """
 main.py
 
