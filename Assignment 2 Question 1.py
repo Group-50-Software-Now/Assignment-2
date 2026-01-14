@@ -190,27 +190,48 @@ def verify_decryption() -> bool:
     print("Decryption failed: files do not match.")
     return False
 
-
 """
 main.py
+-------
+This is the main program file.
 
-This is the entry point of the program.
-It collects user input, runs encryption,
-then performs decryption and verification.
+It:
+1) asks the user for shift1 and shift2
+2) encrypts raw_text.txt into encrypted_text.txt
+3) decrypts encrypted_text.txt into decrypted_text.txt
+4) verifies whether decrypted_text matches raw_text exactly
 """
 
 from encrypt import encrypt_file
 from decrypt import decrypt_file, verify_decryption
 
+
+def get_int(prompt: str) -> int:
+    """
+    Keeps asking the user until they enter a valid integer.
+
+    This prevents the program from crashing if the user types letters by mistake.
+    """
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("Please enter a valid integer.")
+
+
 print("=== Encryption and Decryption Program ===")
 
-shift1 = int(input("Enter shift1 value: "))
-shift2 = int(input("Enter shift2 value: "))
+# Taking user inputs safely
+shift1 = get_int("Enter shift1 value: ")
+shift2 = get_int("Enter shift2 value: ")
 
+# Encrypting the raw file
 encrypt_file(shift1, shift2)
 print("Encryption completed.")
 
+# Decrypting back into decrypted_text.txt
 decrypt_file(shift1, shift2)
 print("Decryption completed.")
 
+# Checking if decryption worked correctly
 verify_decryption()
